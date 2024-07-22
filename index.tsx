@@ -1,16 +1,7 @@
 import debounce from 'lodash/debounce'
 import Icon from 'react-native-vector-icons/Feather'
 import React from 'react'
-import {
-  Appearance,
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
-} from 'react-native'
+import { Appearance, Dimensions, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 interface IAppSearchBarProps {
   editable?: boolean
@@ -70,9 +61,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
       return Appearance.getColorScheme() === 'dark'
     },
     searchDebounce: 1000,
-    get mainColor() {
-      return this.props?.mainColor || (this.dark ? '#87DC84' : '#049A00');
-    },
+    mainColor: '#222222',
     get titleColor() {
       return this.dark ? '#FAFAFA' : '#444444';
     },
@@ -81,27 +70,27 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     },
   };
 
- styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    height: this.AppConfig.android ? 56 : 52,
-    marginTop: this.AppConfig.android ? 2 : 0,
-    alignItems: 'center'
-  },
+  styles = StyleSheet.create({
+    container: {
+      flexDirection: 'row',
+      height: this.AppConfig.android ? 56 : 52,
+      marginTop: this.AppConfig.android ? 2 : 0,
+      alignItems: 'center'
+    },
 
-  inputView: {
-    flex: 1,
-    height: this.AppConfig.android ? 38 : 34,
-    borderRadius: 8,
-    paddingHorizontal: 9,
-    justifyContent: 'center' as const
-  },
+    inputView: {
+      flex: 1,
+      height: this.AppConfig.android ? 38 : 34,
+      borderRadius: 8,
+      paddingHorizontal: 9,
+      justifyContent: 'center' as const
+    },
 
-  inputText: {
-    fontSize: 16,
-    fontFamily: 'TTNorms-Medium'
-  },
-})
+    inputText: {
+      fontSize: 16,
+      fontFamily: 'TTNorms-Medium'
+    },
+  })
 
   state = {
     text: '',
@@ -128,6 +117,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
   }
 
   componentDidMount() {
+    this.AppConfig.mainColor = this.props?.mainColor || (this.AppConfig.dark ? '#87DC84' : '#049A00')
     if (this.props.forwardedRef) {
       this.textInput = this.props.forwardedRef
     } else {
@@ -226,15 +216,16 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
             </Text>
           </View>
         ) : (
-          <>
+          <View style={{ flex: 1, flexDirection: 'row', position: 'relative' }}>
             <TextInput
               ref={this.textInput}
               style={[
                 this.styles.inputView,
                 this.styles.inputText,
-                { 
+                {
                   color: this.AppConfig.titleColor,
-                  backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4'
+                  backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4',
+                  paddingRight: 30
                 },
               ]}
               autoFocus={autoFocus}
@@ -249,23 +240,23 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
               returnKeyType='done'
             />
             {this.state.text ? (
-                <TouchableOpacity
-                  style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10 }}
-                  onPress={() => {
-                    this.onChangeText('')
-                    this.searchFocus()
-                  }}
-                >
-                  <Icon name='x' size={20} color={this.AppConfig.mainColor} />
-                </TouchableOpacity>
+              <TouchableOpacity
+                style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10, position: 'absolute', right: 8, top: 8 }}
+                onPress={() => {
+                  this.onChangeText('')
+                  this.searchFocus()
+                }}
+              >
+                <Icon name='x' size={18} color={this.AppConfig.dark ? '#777777' : '#BBBBBB'} />
+              </TouchableOpacity>
             ) : null}
-          </>
+          </View>
         )}
         {this.state.showCancelButton ? (
           <TouchableOpacity
             style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10 }}
             onPress={this.onCancelButtonPress}
-            >
+          >
             <Text style={{ fontSize: 16, fontFamily: 'TTNorms-Medium', color: this.AppConfig.mainColor }}>
               {this.Locale.getItem('Отмена')}
             </Text>
