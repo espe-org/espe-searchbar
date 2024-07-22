@@ -80,7 +80,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
 
     inputView: {
       flex: 1,
-      height: this.AppConfig.android ? 38 : 34,
+      height: this.AppConfig.android ? 40 : 34,
       borderRadius: 8,
       paddingHorizontal: 9,
       justifyContent: 'center' as const
@@ -241,7 +241,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
             />
             {this.state.text ? (
               <TouchableOpacity
-                style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10, position: 'absolute', right: 8, top: 8 }}
+                style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10, position: 'absolute', right: 8, top: this.AppConfig.android ? 10 : 8 }}
                 onPress={() => {
                   this.onChangeText('')
                   this.searchFocus()
