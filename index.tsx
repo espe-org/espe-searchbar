@@ -46,7 +46,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
       ru: {},
     } as Record<string, Record<string, string>>,
     getCurrentLocale() {
-      return this.props.language || 'en';
+      return this.props?.language || 'en';
     },
     getItem(text: string, strict?: boolean): string {
       if (strict) {
@@ -66,10 +66,15 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     },
     windowWidth: Dimensions.get('window').width,
     windowHeight: Dimensions.get('window').height,
-    dark: this.props.isDarkMode ?? Appearance.getColorScheme() === 'dark',
+    get dark() {
+      return Appearance.getColorScheme() === 'dark'
+    },
     searchDebounce: 1000,
     get mainColor() {
-      return this.props.mainColor || (this.dark ? '#87DC84' : '#049A00');
+      return this.props?.mainColor || (this.dark ? '#87DC84' : '#049A00');
+    },
+    get titleColor() {
+      return this.dark ? '#FAFAFA' : '#444444';
     },
     get borderColor() {
       return this.dark ? '#313131' : '#DDDDDD';
@@ -84,31 +89,18 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     alignItems: 'center'
   },
 
-  get inputView() {
-    return {
-      flex: 1,
-      height: this.AppConfig.android ? 38 : 34,
-      borderRadius: 8,
-      backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4',
-      paddingHorizontal: 9,
-      justifyContent: 'center' as const
-    }
+  inputView: {
+    flex: 1,
+    height: this.AppConfig.android ? 38 : 34,
+    borderRadius: 8,
+    paddingHorizontal: 9,
+    justifyContent: 'center' as const
   },
 
-  get inputText() {
-    return {
-      fontSize: 16,
-      color: this.AppConfig.titleColor,
-      fontFamily: 'TTNorms-Medium'
-    }
+  inputText: {
+    fontSize: 16,
+    fontFamily: 'TTNorms-Medium'
   },
-
-  get border() {
-    return {
-      borderBottomColor: this.AppConfig.borderColor,
-      borderBottomWidth: 1
-    }
-  }
 })
 
   state = {
@@ -220,9 +212,15 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     } = this.props
 
     return (
-      <View style={[this.styles.container, !this.props.noBorder && this.styles.border]}>
+      <View style={[
+        this.styles.container,
+        !this.props.noBorder && {
+          borderBottomColor: this.AppConfig.borderColor,
+          borderBottomWidth: 1,
+        }
+      ]}>
         {editable === false ? (
-          <View style={this.styles.inputView}>
+          <View style={[this.styles.inputView, { backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4' }]}>
             <Text style={[this.styles.inputText, { color: this.AppConfig.dark ? '#777777' : '#BBBBBB' }]}>
               {placeholder || this.Locale.getItem('Поиск')}
             </Text>
@@ -231,7 +229,14 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
           <>
             <TextInput
               ref={this.textInput}
-              style={[this.styles.inputView, this.styles.inputText]}
+              style={[
+                this.styles.inputView,
+                this.styles.inputText,
+                { 
+                  color: this.AppConfig.titleColor,
+                  backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4'
+                },
+              ]}
               autoFocus={autoFocus}
               onSubmitEditing={this.onSearchButtonPress}
               onChangeText={this.onChangeText}
