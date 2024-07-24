@@ -17,6 +17,7 @@ interface IAppSearchBarProps {
   onSearchButtonPress?: (text?: string) => void
   async?: boolean
   autoFocus?: boolean
+  keepCancelBtn?: boolean
   language?: 'ru' | 'en'
   isDarkMode?: boolean
   mainColor?: string
@@ -143,13 +144,20 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     if (this.props.onCancelButtonPress) {
       this.props.onCancelButtonPress()
     }
+    if (this.props.keepCancelBtn) {
+      this.setState({
+        showCancelButton: false
+      })
+    }
   }
 
   onBlur = () => {
     const { onBlur } = this.props
-    this.setState({
-      showCancelButton: false
-    })
+    if (!this.props.keepCancelBtn) {
+      this.setState({
+        showCancelButton: false
+      })
+    }
     if (onBlur) {
       onBlur()
     }
