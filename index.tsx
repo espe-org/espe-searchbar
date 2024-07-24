@@ -17,7 +17,6 @@ interface IAppSearchBarProps {
   onSearchButtonPress?: (text?: string) => void
   async?: boolean
   autoFocus?: boolean
-  keepCancelBtn?: boolean
   language?: 'ru' | 'en'
   isDarkMode?: boolean
   mainColor?: string
@@ -37,14 +36,12 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
       },
       ru: {},
     } as Record<string, Record<string, string>>,
-    getCurrentLocale() {
-      return this.props?.language || 'en';
-    },
+    getCurrentLocale: 'en',
     getItem(text: string, strict?: boolean): string {
       if (strict) {
-        return this.locale[this.getCurrentLocale()][text];
+        return this.locale[this.getCurrentLocale][text];
       }
-      return this.locale[this.getCurrentLocale()][text] || text;
+      return this.locale[this.getCurrentLocale][text] || text;
     },
   };
 
@@ -128,6 +125,10 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     if (this.props.autoFocus) {
       this.searchFocus()
     }
+
+    if (this.props.language) {
+      this.Locale.getCurrentLocale = this.props.language
+    }
   }
 
   componentWillUnmount() {
@@ -142,20 +143,13 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     if (this.props.onCancelButtonPress) {
       this.props.onCancelButtonPress()
     }
-    if (this.props.keepCancelBtn) {
-      this.setState({
-        showCancelButton: false
-      })
-    }
   }
 
   onBlur = () => {
     const { onBlur } = this.props
-    if (!this.props.keepCancelBtn) {
-      this.setState({
-        showCancelButton: false
-      })
-    }
+    this.setState({
+      showCancelButton: false
+    })
     if (onBlur) {
       onBlur()
     }
