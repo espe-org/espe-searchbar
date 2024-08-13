@@ -129,6 +129,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
 
     if (this.props.language) {
       this.Locale.getCurrentLocale = this.props.language
+      this.forceUpdate()
     }
   }
 
