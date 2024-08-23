@@ -92,7 +92,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
   })
 
   state = {
-    text: '',
+    text: this.props.text || '',
     showCancelButton: false
   }
 
@@ -130,6 +130,12 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     if (this.props.language) {
       this.Locale.getCurrentLocale = this.props.language
       this.forceUpdate()
+    }
+  }
+
+  componentDidUpdate(prevProps: Readonly<IAppSearchBarProps>) {
+    if(prevProps.text !== this.props.text){
+      this.setState({text: this.props.text})
     }
   }
 
