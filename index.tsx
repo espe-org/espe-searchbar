@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce'
 import Icon from 'react-native-vector-icons/Feather'
 import React from 'react'
-import { Appearance, Dimensions, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 interface IAppSearchBarProps {
   editable?: boolean
@@ -40,11 +40,11 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     getCurrentLocale: 'en',
     getItem(text: string, strict?: boolean): string {
       if (strict) {
-        return this.locale[this.getCurrentLocale][text];
+        return this.locale[this.getCurrentLocale][text]
       }
-      return this.locale[this.getCurrentLocale][text] || text;
+      return this.locale[this.getCurrentLocale][text] || text
     },
-  };
+  }
 
   AppConfig = {
     iOS: Platform.OS === 'ios',
@@ -52,22 +52,20 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     // @ts-ignore
     mac: Platform.isMacCatalyst,
     get isPad() {
-      return this.windowWidth > 767 || this.mac;
+      return this.windowWidth > 767 || this.mac
     },
     windowWidth: Dimensions.get('window').width,
     windowHeight: Dimensions.get('window').height,
-    get dark() {
-      return Appearance.getColorScheme() === 'dark'
-    },
+    dark: this.props.isDarkMode,
     searchDebounce: 1000,
     mainColor: '#222222',
     get titleColor() {
-      return this.dark ? '#FAFAFA' : '#444444';
+      return this.dark ? '#FAFAFA' : '#444444'
     },
     get borderColor() {
-      return this.dark ? '#313131' : '#DDDDDD';
+      return this.dark ? '#313131' : '#DDDDDD'
     },
-  };
+  }
 
   styles = StyleSheet.create({
     container: {
@@ -134,8 +132,11 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
   }
 
   componentDidUpdate(prevProps: Readonly<IAppSearchBarProps>) {
-    if(prevProps.text !== this.props.text){
-      this.setState({text: this.props.text})
+    if (prevProps.text !== this.props.text) {
+      this.setState({ text: this.props.text })
+    }
+    if (prevProps.isDarkMode !== this.props.isDarkMode) {
+      this.AppConfig.dark = this.props.isDarkMode
     }
   }
 
@@ -219,13 +220,15 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
     } = this.props
 
     return (
-      <View style={[
-        this.styles.container,
-        !this.props.noBorder && {
-          borderBottomColor: this.AppConfig.borderColor,
-          borderBottomWidth: 1,
-        }
-      ]}>
+      <View
+        style={[
+          this.styles.container,
+          !this.props.noBorder && {
+            borderBottomColor: this.AppConfig.borderColor,
+            borderBottomWidth: 1,
+          }
+        ]}
+      >
         {editable === false ? (
           <View style={[this.styles.inputView, { backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4' }]}>
             <Text style={[this.styles.inputText, { color: this.AppConfig.dark ? '#777777' : '#BBBBBB' }]}>
