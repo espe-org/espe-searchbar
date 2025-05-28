@@ -196,7 +196,7 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
   onChangeText = text => {
     this.setState({ text })
 
-    if (this.props.search) {
+    if (this.props.search && text.length > 2) {
       if (this.props.async) {
         if (this.props.asyncInstantCallback) {
           this.props.asyncInstantCallback(text)
