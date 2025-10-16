@@ -258,6 +258,8 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
               value={this.state.text}
               underlineColorAndroid='transparent'
               returnKeyType='done'
+              selectionColor={this.AppConfig.mainColor}
+              cursorColor={this.AppConfig.mainColor}
             />
             {this.state.text ? (
               <TouchableOpacity
