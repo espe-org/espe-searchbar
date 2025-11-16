@@ -5,8 +5,7 @@
 	"source": "index.tsx",
 	"main": "index.tsx",
 	"scripts": {
-		"typecheck": "tsc --noEmit",
-		"lint": "eslint \"**/*.{js,ts,tsx}\""
+		"typecheck": "tsc --noEmit"
 	},
 	"keywords": [
 		"react-native",
@@ -37,14 +36,5 @@
 		"react": "*",
 		"react-native": "*"
 	},
-	"packageManager": "yarn@3.6.4",
-	"eslintConfig": {
-		"root": true,
-		"extends": [
-			"@react-native"
-		],
-		"rules": {
-			"react/react-in-jsx-scope": "off"
-		}
-	}
+	"packageManager": "yarn@3.6.4"
 }
