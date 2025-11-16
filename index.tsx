@@ -1,78 +1,89 @@
 import debounce from 'lodash/debounce'
-import Icon from 'react-native-vector-icons/Feather'
 import React from 'react'
-import { Dimensions, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import {
+  Dimensions,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native"
 
 interface IAppSearchBarProps {
-  editable?: boolean
-  text?: string
-  search?: (text?: string) => void
-  asyncInstantCallback?: (text?: string) => void
-  noBorder?: boolean
-  placeholder?: string
-  forwardedRef?: any
-  onBlur?: () => void
-  onFocus?: () => void
-  onCancelButtonPress?: (text?: string) => void
-  onSearchButtonPress?: (text?: string) => void
-  async?: boolean
-  autoFocus?: boolean
-  keepCancelBtn?: boolean
-  language?: 'ru' | 'en'
-  isDarkMode?: boolean
-  mainColor?: string
+  editable?: boolean;
+  text?: string;
+  search?: (text?: string) => void;
+  asyncInstantCallback?: (text?: string) => void;
+  noBorder?: boolean;
+  placeholder?: string;
+  forwardedRef?: any;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  onCancelButtonPress?: (text?: string) => void;
+  onSearchButtonPress?: (text?: string) => void;
+  async?: boolean;
+  autoFocus?: boolean;
+  keepCancelBtn?: boolean;
+  language?: "ru" | "en";
+  isDarkMode?: boolean;
+  mainColor?: string;
 }
 
 interface IAppSearchBarState {
-  text: string
-  showCancelButton: boolean
+  text: string;
+  showCancelButton: boolean;
 }
 
-class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarState> {
+class AppSearchBar extends React.Component<
+  IAppSearchBarProps,
+  IAppSearchBarState
+> {
   Locale = {
     locale: {
       en: {
-        'Поиск': 'Search',
-        'Отмена': 'Cancel',
+        Поиск: "Search",
+        Отмена: "Cancel",
       },
       ru: {},
     } as Record<string, Record<string, string>>,
-    getCurrentLocale: 'en',
+    getCurrentLocale: "en",
     getItem(text: string, strict?: boolean): string {
       if (strict) {
-        return this.locale[this.getCurrentLocale][text]
+        return this.locale[this.getCurrentLocale][text];
       }
-      return this.locale[this.getCurrentLocale][text] || text
+      return this.locale[this.getCurrentLocale][text] || text;
     },
-  }
+  };
 
   AppConfig = {
-    iOS: Platform.OS === 'ios',
-    android: Platform.OS === 'android',
-    // @ts-ignore
+    iOS: Platform.OS === "ios",
+    android: Platform.OS === "android",
+    // @ts-expect-error
     mac: Platform.isMacCatalyst,
     get isPad() {
-      return this.windowWidth > 767 || this.mac
+      return this.windowWidth > 767 || this.mac;
     },
-    windowWidth: Dimensions.get('window').width,
-    windowHeight: Dimensions.get('window').height,
+    windowWidth: Dimensions.get("window").width,
+    windowHeight: Dimensions.get("window").height,
     dark: this.props.isDarkMode,
     searchDebounce: 1000,
-    mainColor: '#222222',
+    mainColor: "#222222",
     get titleColor() {
-      return this.dark ? '#FAFAFA' : '#444444'
+      return this.dark ? "#FAFAFA" : "#444444";
     },
     get borderColor() {
-      return this.dark ? '#313131' : '#DDDDDD'
+      return this.dark ? "#313131" : "#DDDDDD";
     },
-  }
+  };
 
   styles = StyleSheet.create({
     container: {
-      flexDirection: 'row',
+      flexDirection: "row",
       height: this.AppConfig.android ? 56 : 52,
       marginTop: this.AppConfig.android ? 2 : 0,
-      alignItems: 'center'
+      alignItems: "center",
     },
 
     inputView: {
@@ -80,144 +91,141 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
       height: this.AppConfig.android ? 40 : 34,
       borderRadius: 8,
       paddingHorizontal: 9,
-      justifyContent: 'center' as const
+      justifyContent: "center" as const,
     },
 
     inputText: {
       fontSize: 16,
-      fontFamily: 'TTNorms-Medium'
+      fontFamily: "TTNorms-Medium",
     },
-  })
+  });
 
   state = {
-    text: this.props.text || '',
-    showCancelButton: false
-  }
+    text: this.props.text || "",
+    showCancelButton: false,
+  };
 
-  private textInput
+  private textInput;
 
   searchFocus = () => {
     if (this.textInput.current) {
-      this.textInput.current.focus()
+      this.textInput.current.focus();
     }
-  }
+  };
 
   searchBlur = () => {
     if (this.textInput.current) {
       if (this.AppConfig.iOS) {
-        this.textInput.current.blur()
+        this.textInput.current.blur();
         // this.searchBar.current.unFocus()
       } else {
-        this.textInput.current.blur()
+        this.textInput.current.blur();
       }
     }
-  }
+  };
 
   componentDidMount() {
-    this.AppConfig.mainColor = this.props?.mainColor || (this.AppConfig.dark ? '#87DC84' : '#049A00')
+    this.AppConfig.mainColor =
+      this.props?.mainColor || (this.AppConfig.dark ? "#87DC84" : "#049A00");
     if (this.props.forwardedRef) {
-      this.textInput = this.props.forwardedRef
+      this.textInput = this.props.forwardedRef;
     } else {
-      this.textInput = React.createRef<TextInput>()
+      this.textInput = React.createRef<TextInput>();
     }
 
     if (this.props.autoFocus) {
-      this.searchFocus()
+      this.searchFocus();
     }
 
     if (this.props.language) {
-      this.Locale.getCurrentLocale = this.props.language
-      this.forceUpdate()
+      this.Locale.getCurrentLocale = this.props.language;
+      this.forceUpdate();
     }
   }
 
   componentDidUpdate(prevProps: Readonly<IAppSearchBarProps>) {
     if (prevProps.text !== this.props.text) {
-      this.setState({ text: this.props.text })
+      this.setState({ text: this.props.text });
     }
     if (prevProps.isDarkMode !== this.props.isDarkMode) {
-      this.AppConfig.dark = this.props.isDarkMode
+      this.AppConfig.dark = this.props.isDarkMode;
     }
   }
 
   componentWillUnmount() {
-    this.search.cancel()
+    this.search.cancel();
   }
 
   onCancelButtonPress = () => {
-    this.clearInput()
+    this.clearInput();
     if (this.textInput.current) {
-      this.textInput.current.blur()
+      this.textInput.current.blur();
     }
     if (this.props.onCancelButtonPress) {
-      this.props.onCancelButtonPress()
+      this.props.onCancelButtonPress();
     }
     if (this.props.keepCancelBtn) {
       this.setState({
-        showCancelButton: false
-      })
+        showCancelButton: false,
+      });
     }
-  }
+  };
 
   onBlur = () => {
-    const { onBlur } = this.props
+    const { onBlur } = this.props;
     if (!this.props.keepCancelBtn) {
       this.setState({
-        showCancelButton: false
-      })
+        showCancelButton: false,
+      });
     }
     if (onBlur) {
-      onBlur()
+      onBlur();
     }
-  }
+  };
 
   onFocus = () => {
     this.setState({
-      showCancelButton: true
-    })
+      showCancelButton: true,
+    });
     if (this.props.onFocus) {
-      this.props.onFocus()
+      this.props.onFocus();
     }
-  }
+  };
 
   clearInput = () => {
-    this.setState({ text: '' })
-    this.onChangeText('')
-  }
+    this.setState({ text: "" });
+    this.onChangeText("");
+  };
 
   onSearchButtonPress = () => {
     if (this.props.onSearchButtonPress) {
-      this.props.onSearchButtonPress(this.state.text)
+      this.props.onSearchButtonPress(this.state.text);
     }
 
-    this.searchBlur()
-  }
+    this.searchBlur();
+  };
 
-  onChangeText = text => {
-    this.setState({ text })
+  onChangeText = (text) => {
+    this.setState({ text });
 
     if (this.props.search && text.length !== 1) {
       if (this.props.async) {
         if (this.props.asyncInstantCallback) {
-          this.props.asyncInstantCallback(text)
+          this.props.asyncInstantCallback(text);
         }
-        this.search(text)
+        this.search(text);
       } else {
-        this.props.search(text)
+        this.props.search(text);
       }
     }
-  }
+  };
 
-  search = debounce(text => {
-    this.props.search(text)
-  }, this.AppConfig.searchDebounce)
+  search = debounce((text) => {
+    this.props.search(text);
+  }, this.AppConfig.searchDebounce);
 
   render() {
-    const {
-      placeholder,
-      editable,
-      autoFocus
-    } = this.props
+    const { placeholder, editable, autoFocus } = this.props;
 
     return (
       <View
@@ -226,17 +234,27 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
           !this.props.noBorder && {
             borderBottomColor: this.AppConfig.borderColor,
             borderBottomWidth: 1,
-          }
+          },
         ]}
       >
         {editable === false ? (
-          <View style={[this.styles.inputView, { backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4' }]}>
-            <Text style={[this.styles.inputText, { color: this.AppConfig.dark ? '#777777' : '#BBBBBB' }]}>
-              {placeholder || this.Locale.getItem('Поиск')}
+          <View
+            style={[
+              this.styles.inputView,
+              { backgroundColor: this.AppConfig.dark ? "#222222" : "#F4F4F4" },
+            ]}
+          >
+            <Text
+              style={[
+                this.styles.inputText,
+                { color: this.AppConfig.dark ? "#777777" : "#BBBBBB" },
+              ]}
+            >
+              {placeholder || this.Locale.getItem("Поиск")}
             </Text>
           </View>
         ) : (
-          <View style={{ flex: 1, flexDirection: 'row', position: 'relative' }}>
+          <View style={{ flex: 1, flexDirection: "row", position: "relative" }}>
             <TextInput
               ref={this.textInput}
               style={[
@@ -244,8 +262,8 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
                 this.styles.inputText,
                 {
                   color: this.AppConfig.titleColor,
-                  backgroundColor: this.AppConfig.dark ? '#222222' : '#F4F4F4',
-                  paddingRight: 30
+                  backgroundColor: this.AppConfig.dark ? "#222222" : "#F4F4F4",
+                  paddingRight: 30,
                 },
               ]}
               autoFocus={autoFocus}
@@ -253,40 +271,66 @@ class AppSearchBar extends React.Component<IAppSearchBarProps, IAppSearchBarStat
               onChangeText={this.onChangeText}
               onFocus={this.onFocus}
               onBlur={this.onBlur}
-              placeholder={placeholder || this.Locale.getItem('Поиск')}
-              placeholderTextColor={this.AppConfig.dark ? '#777777' : '#BBBBBB'}
+              placeholder={placeholder || this.Locale.getItem("Поиск")}
+              placeholderTextColor={this.AppConfig.dark ? "#777777" : "#BBBBBB"}
               value={this.state.text}
-              underlineColorAndroid='transparent'
-              returnKeyType='done'
+              underlineColorAndroid="transparent"
+              returnKeyType="done"
               selectionColor={this.AppConfig.mainColor}
               cursorColor={this.AppConfig.mainColor}
             />
             {this.state.text ? (
               <TouchableOpacity
-                style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10, position: 'absolute', right: 8, top: this.AppConfig.android ? 10 : 8 }}
+                style={{
+                  alignItems: "center",
+                  flexDirection: "row",
+                  marginLeft: 10,
+                  position: "absolute",
+                  right: 8,
+                  top: this.AppConfig.android ? 10 : 8,
+                }}
                 onPress={() => {
-                  this.onChangeText('')
-                  this.searchFocus()
+                  this.onChangeText("");
+                  this.searchFocus();
                 }}
               >
-                <Icon name='x' size={18} color={this.AppConfig.dark ? '#777777' : '#BBBBBB'} />
+                <Image
+                  source={require("./x.png")}
+                  style={{
+                    width: 18,
+                    height: 18,
+                    tintColor: this.AppConfig.dark ? "#777777" : "#BBBBBB",
+                  }}
+                />
               </TouchableOpacity>
             ) : null}
           </View>
         )}
         {this.state.showCancelButton ? (
           <TouchableOpacity
-            style={{ alignItems: 'center', flexDirection: 'row', marginLeft: 10 }}
+            style={{
+              alignItems: "center",
+              flexDirection: "row",
+              marginLeft: 10,
+            }}
             onPress={this.onCancelButtonPress}
           >
-            <Text style={{ fontSize: 16, fontFamily: 'TTNorms-Medium', color: this.AppConfig.mainColor }}>
-              {this.Locale.getItem('Отмена')}
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "TTNorms-Medium",
+                color: this.AppConfig.mainColor,
+              }}
+            >
+              {this.Locale.getItem("Отмена")}
             </Text>
           </TouchableOpacity>
         ) : null}
       </View>
-    )
+    );
   }
 }
 
-export default React.forwardRef((props, ref) => <AppSearchBar forwardedRef={ref} {...props} />) as any
+export default React.forwardRef((props, ref) => (
+  <AppSearchBar forwardedRef={ref} {...props} />
+)) as any;
