@@ -1,40 +1,41 @@
 {
-	"name": "espe-searchbar",
-	"version": "0.9.1",
-	"description": "ESPE SearchBar for React-Native",
-	"source": "index.tsx",
-	"main": "index.tsx",
-	"scripts": {
-		"typecheck": "tsc --noEmit"
-	},
-	"keywords": [
-		"react-native",
-		"searchbar",
-		"ios",
-		"android"
-	],
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/espe-org/espe-searchbar.git"
-	},
-	"author": "Salavat Iskhakov <salavat@projecto.pro> (https://github.com/espe-org)",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/espe-org/espe-searchbar/issues"
-	},
-	"homepage": "https://github.com/espe-org/espe-searchbar#readme",
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org/"
-	},
-	"devDependencies": {
-		"@types/react": "19.0.10",
-		"react": "19.1.0",
-		"react-native": "0.81.2",
-		"typescript": "5.9.3"
-	},
-	"peerDependencies": {
-		"react": "*",
-		"react-native": "*"
-	},
-	"packageManager": "yarn@3.6.4"
+  "name": "espe-searchbar",
+  "version": "2026.1",
+  "description": "ESPE SearchBar for React-Native",
+  "source": "index.tsx",
+  "main": "index.tsx",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "bump": "node scripts/bump.js"
+  },
+  "keywords": [
+    "react-native",
+    "searchbar",
+    "ios",
+    "android"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/espe-org/espe-searchbar.git"
+  },
+  "author": "Salavat Iskhakov <salavat@projecto.pro> (https://github.com/espe-org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/espe-org/espe-searchbar/issues"
+  },
+  "homepage": "https://github.com/espe-org/espe-searchbar#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.10",
+    "react": "19.1.0",
+    "react-native": "0.81.2",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "packageManager": "yarn@3.6.4"
 }
