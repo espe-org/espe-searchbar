@@ -34,6 +34,7 @@ interface IAppSearchBarProps {
 interface IAppSearchBarState {
   text: string;
   showCancelButton: boolean;
+  dark: boolean;
 }
 
 class AppSearchBar extends React.Component<
@@ -67,7 +68,6 @@ class AppSearchBar extends React.Component<
     },
     windowWidth: Dimensions.get("window").width,
     windowHeight: Dimensions.get("window").height,
-    dark: this.props.isDarkMode,
     searchDebounce: 1000,
     mainColor: "#222222",
     get titleColor() {
@@ -103,6 +103,7 @@ class AppSearchBar extends React.Component<
   state = {
     text: this.props.text || "",
     showCancelButton: false,
+    dark: this.props.isDarkMode,
   };
 
   private textInput;
@@ -126,7 +127,7 @@ class AppSearchBar extends React.Component<
 
   componentDidMount() {
     this.AppConfig.mainColor =
-      this.props?.mainColor || (this.AppConfig.dark ? "#87DC84" : "#049A00");
+      this.props?.mainColor || (this.state.dark ? "#87DC84" : "#049A00");
     if (this.props.forwardedRef) {
       this.textInput = this.props.forwardedRef;
     } else {
@@ -148,7 +149,7 @@ class AppSearchBar extends React.Component<
       this.setState({ text: this.props.text });
     }
     if (prevProps.isDarkMode !== this.props.isDarkMode) {
-      this.AppConfig.dark = this.props.isDarkMode;
+      this.setState({ dark: this.props.isDarkMode });
     }
   }
 
@@ -241,13 +242,13 @@ class AppSearchBar extends React.Component<
           <View
             style={[
               this.styles.inputView,
-              { backgroundColor: this.AppConfig.dark ? "#222222" : "#F4F4F4" },
+              { backgroundColor: this.state.dark ? "#222222" : "#F4F4F4" },
             ]}
           >
             <Text
               style={[
                 this.styles.inputText,
-                { color: this.AppConfig.dark ? "#777777" : "#BBBBBB" },
+                { color: this.state.dark ? "#777777" : "#BBBBBB" },
               ]}
             >
               {placeholder || this.Locale.getItem("Поиск")}
@@ -262,7 +263,7 @@ class AppSearchBar extends React.Component<
                 this.styles.inputText,
                 {
                   color: this.AppConfig.titleColor,
-                  backgroundColor: this.AppConfig.dark ? "#222222" : "#F4F4F4",
+                  backgroundColor: this.state.dark ? "#222222" : "#F4F4F4",
                   paddingRight: 30,
                 },
               ]}
@@ -272,7 +273,7 @@ class AppSearchBar extends React.Component<
               onFocus={this.onFocus}
               onBlur={this.onBlur}
               placeholder={placeholder || this.Locale.getItem("Поиск")}
-              placeholderTextColor={this.AppConfig.dark ? "#777777" : "#BBBBBB"}
+              placeholderTextColor={this.state.dark ? "#777777" : "#BBBBBB"}
               value={this.state.text}
               underlineColorAndroid="transparent"
               returnKeyType="done"
@@ -299,7 +300,7 @@ class AppSearchBar extends React.Component<
                   style={{
                     width: 18,
                     height: 18,
-                    tintColor: this.AppConfig.dark ? "#777777" : "#BBBBBB",
+                    tintColor: this.state.dark ? "#777777" : "#BBBBBB",
                   }}
                 />
               </TouchableOpacity>
