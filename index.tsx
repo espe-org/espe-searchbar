@@ -71,10 +71,10 @@ class AppSearchBar extends React.Component<
     searchDebounce: 1000,
     mainColor: "#222222",
     get titleColor() {
-      return this.dark ? "#FAFAFA" : "#444444";
+      return this.state.dark ? "#FAFAFA" : "#444444";
     },
     get borderColor() {
-      return this.dark ? "#313131" : "#DDDDDD";
+      return this.state.dark ? "#313131" : "#DDDDDD";
     },
   };
 
