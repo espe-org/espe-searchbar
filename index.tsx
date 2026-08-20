@@ -62,7 +62,8 @@ class AppSearchBar extends React.Component<
 		iOS: Platform.OS === "ios",
 		android: Platform.OS === "android",
 		dark: Boolean(this.props.isDarkMode),
-		mac: Platform.isMacCatalyst,
+		// RN's strict Platform type is a per-OS union; isMacCatalyst only exists on iOS.
+		mac: Platform.OS === "ios" && Platform.isMacCatalyst,
 		get isPad() {
 			return this.windowWidth > 767 || this.mac;
 		},
