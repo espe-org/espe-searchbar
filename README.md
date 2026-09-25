@@ -5,8 +5,10 @@ custom SearchBar
 ## Installation
 
 ```sh
-npm install espe-searchbar
+npm install espe-searchbar lodash
 ```
+
+lodash is a peer dependency: the app provides it.
 
 ## Usage
 
